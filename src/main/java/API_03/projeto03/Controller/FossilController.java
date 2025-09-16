@@ -1,9 +1,11 @@
 package API_03.projeto03.Controller;
 
+import API_03.projeto03.Dtos.FossilDto;
 import API_03.projeto03.Models.Fossil;
 import API_03.projeto03.Services.FossilService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -61,6 +63,13 @@ public class FossilController {
             return buildErrorResponse("Erro ao deletar", "Fóssil com ID " + id + " não encontrado.", HttpStatus.NOT_FOUND);
         }
     }
+
+    @PostMapping
+    public ResponseEntity<Fossil> create(@RequestBody @Validated FossilDto dto) {
+        Fossil created = fossilService.createFromDto(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+    }
+
 
     private ResponseEntity<Map<String, Object>> buildErrorResponse(String error, String mensagem, HttpStatus status) {
         Map<String, Object> body = new HashMap<>();
